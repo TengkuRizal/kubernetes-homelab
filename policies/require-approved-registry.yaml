@@ -1,0 +1,29 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-approved-registry
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+  - name: only-gitlab-registry
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    exclude:
+      any:
+      - resources:
+          namespaces:
+          - kube-system
+          - kyverno
+          - ingress-nginx
+          - monitoring
+          - local-path-storage
+    validate:
+      message: "Container images must come from approved GitLab Registry 10.10.1.101:5050."
+      pattern:
+        spec:
+          containers:
+          - image: "10.10.1.101:5050/*"
