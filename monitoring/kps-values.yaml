@@ -1,0 +1,10 @@
+# kube-prometheus-stack Helm values
+# Deployed via: helm install monitoring prometheus-community/kube-prometheus-stack -f kps-values.yaml -n monitoring
+grafana:
+  service:
+    type: NodePort
+    nodePort: 30080
+
+prometheus:
+  prometheusSpec:
+    retention: 7d
